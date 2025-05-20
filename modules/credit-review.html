@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>信用额度审核 - 资产中台</title>
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1890ff;
+            --success-color: #52c41a;
+            --warning-color: #faad14;
+            --error-color: #f5222d;
+            --text-color: #333;
+            --border-color: #e8e8e8;
+            --bg-color: #f0f2f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text-color);
+            background: var(--bg-color);
+        }
+
+        .filters {
+            background: white;
+            padding: 24px;
+            border-radius: 4px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 4px rgba(0,21,41,.08);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .filter-item {
+            flex: 1;
+        }
+
+        .filter-item label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .filter-item input,
+        .filter-item select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .filter-item input:focus,
+        .filter-item select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .filter-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-error {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .btn-default {
+            background: white;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .table-container {
+            background: white;
+            padding: 24px;
+            border-radius: 4px;
+            box-shadow: 0 1px 4px rgba(0,21,41,.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: #fafafa;
+            font-weight: 500;
+        }
+
+        .status-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 2px;
+            font-size: 12px;
+        }
+
+        .status-pending {
+            background: #fff7e6;
+            color: var(--warning-color);
+        }
+
+        .status-approved {
+            background: #f6ffed;
+            color: var(--success-color);
+        }
+
+        .status-rejected {
+            background: #fff1f0;
+            color: var(--error-color);
+        }
+
+        .action-btn {
+            color: var(--primary-color);
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+
+        .action-btn:hover {
+            opacity: 0.8;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 24px;
+            border-radius: 4px;
+            width: 500px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .amount {
+            font-family: monospace;
+            font-weight: 500;
+        }
+
+        .date-range {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 引入共享导航 -->
+    <div id="nav-container"></div>
+
+    <script>
+        // 加载共享导航
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '../shared/nav.html', true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                document.getElementById('nav-container').innerHTML = xhr.responseText;
+                // 设置页面标题
+                document.getElementById('page-title').textContent = '信用额度审核';
+                
+                // 将页面内容移动到content区域
+                const content = document.querySelector('.content');
+                const filters = document.querySelector('.filters');
+                const tableContainer = document.querySelector('.table-container');
+                const modals = document.querySelectorAll('.modal');
+                
+                if (filters) content.appendChild(filters);
+                if (tableContainer) content.appendChild(tableContainer);
+                modals.forEach(modal => content.appendChild(modal));
+            }
+        };
+        xhr.send();
+    </script>
+
+    <div class="filters">
+        <div class="filter-row">
+            <div class="filter-item">
+                <label>主体ID</label>
+                <input type="text" placeholder="请输入主体ID">
+            </div>
+            <div class="filter-item">
+                <label>申请日期</label>
+                <input type="date">
+            </div>
+            <div class="filter-item">
+                <label>申请额度范围</label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="number" placeholder="最小值" style="flex: 1;">
+                    <input type="number" placeholder="最大值" style="flex: 1;">
+                </div>
+            </div>
+        </div>
+        <div class="filter-row">
+            <div class="filter-item">
+                <label>审核状态</label>
+                <select multiple>
+                    <option value="pending" selected>待审核</option>
+                    <option value="approved">通过</option>
+                    <option value="rejected">驳回</option>
+                </select>
+            </div>
+        </div>
+        <div class="filter-actions">
+            <button class="btn btn-default">重置</button>
+            <button class="btn btn-primary">查询</button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>申请日期</th>
+                    <th>主体ID</th>
+                    <th>申请额度</th>
+                    <th>生效/失效时间</th>
+                    <th>审核状态</th>
+                    <th>审批人</th>
+                    <th>审批时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2024-03-20</td>
+                    <td>SUB001</td>
+                    <td class="amount">¥100,000.00</td>
+                    <td>
+                        <div class="date-range">
+                            2024-03-20 至 2024-12-31
+                        </div>
+                    </td>
+                    <td><span class="status-tag status-pending">待审核</span></td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>
+                        <button class="btn btn-success">通过</button>
+                        <button class="btn btn-error">驳回</button>
+                        <button class="action-btn">查看详情</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2024-03-19</td>
+                    <td>SUB002</td>
+                    <td class="amount">¥50,000.00</td>
+                    <td>
+                        <div class="date-range">
+                            2024-03-19 至 2024-12-31
+                        </div>
+                    </td>
+                    <td><span class="status-tag status-approved">通过</span></td>
+                    <td>张三</td>
+                    <td>2024-03-19 15:30</td>
+                    <td>
+                        <button class="action-btn">查看详情</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 审核弹窗 -->
+    <div class="modal" id="reviewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>审核意见</h3>
+                <button class="close">&times;</button>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label>审核意见</label>
+                    <textarea placeholder="请输入审核意见"></textarea>
+                </div>
+                <div class="filter-actions">
+                    <button type="button" class="btn btn-default">取消</button>
+                    <button type="submit" class="btn btn-primary">确认</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 简单的交互逻辑
+        document.querySelectorAll('.btn-success, .btn-error').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('reviewModal').style.display = 'block';
+            });
+        });
+
+        document.querySelector('.close').addEventListener('click', () => {
+            document.getElementById('reviewModal').style.display = 'none';
+        });
+
+        document.querySelector('.btn-default').addEventListener('click', () => {
+            document.getElementById('reviewModal').style.display = 'none';
+        });
+    </script>
+</body>
+</html> 

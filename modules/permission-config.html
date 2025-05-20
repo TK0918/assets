@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>权限配置 - 资产中台</title>
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1890ff;
+            --success-color: #52c41a;
+            --warning-color: #faad14;
+            --error-color: #f5222d;
+            --text-color: #333;
+            --border-color: #e8e8e8;
+            --bg-color: #f0f2f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text-color);
+            background: var(--bg-color);
+        }
+
+        .filters {
+            background: white;
+            padding: 24px;
+            border-radius: 4px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 4px rgba(0,21,41,.08);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .filter-item {
+            flex: 1;
+        }
+
+        .filter-item label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .filter-item input,
+        .filter-item select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .filter-item input:focus,
+        .filter-item select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .filter-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-default {
+            background: white;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .table-container {
+            background: white;
+            padding: 24px;
+            border-radius: 4px;
+            box-shadow: 0 1px 4px rgba(0,21,41,.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: #fafafa;
+            font-weight: 500;
+        }
+
+        .status-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 2px;
+            font-size: 12px;
+        }
+
+        .status-enabled {
+            background: #f6ffed;
+            color: var(--success-color);
+        }
+
+        .status-disabled {
+            background: #fff1f0;
+            color: var(--error-color);
+        }
+
+        .action-btn {
+            color: var(--primary-color);
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+
+        .action-btn:hover {
+            opacity: 0.8;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 24px;
+            border-radius: 4px;
+            width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .permission-tree {
+            margin-top: 16px;
+        }
+
+        .permission-item {
+            margin-bottom: 8px;
+        }
+
+        .permission-item label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .permission-item input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .log-list {
+            margin-top: 16px;
+        }
+
+        .log-item {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .log-item:last-child {
+            border-bottom: none;
+        }
+
+        .log-time {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .log-content {
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 引入共享导航 -->
+    <div id="nav-container"></div>
+
+    <script>
+        // 加载共享导航
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '../shared/nav.html', true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                document.getElementById('nav-container').innerHTML = xhr.responseText;
+                // 设置页面标题
+                document.getElementById('page-title').textContent = '权限配置';
+                
+                // 将页面内容移动到content区域
+                const content = document.querySelector('.content');
+                const filters = document.querySelector('.filters');
+                const tableContainer = document.querySelector('.table-container');
+                const modals = document.querySelectorAll('.modal');
+                
+                if (filters) content.appendChild(filters);
+                if (tableContainer) content.appendChild(tableContainer);
+                modals.forEach(modal => content.appendChild(modal));
+            }
+        };
+        xhr.send();
+    </script>
+
+    <div class="filters">
+        <div class="filter-row">
+            <div class="filter-item">
+                <label>角色名称</label>
+                <input type="text" placeholder="请输入角色名称">
+            </div>
+            <div class="filter-item">
+                <label>资源类型</label>
+                <select>
+                    <option value="">全部</option>
+                    <option value="menu">菜单</option>
+                    <option value="api">接口</option>
+                    <option value="button">按钮</option>
+                </select>
+            </div>
+            <div class="filter-item">
+                <label>资源名称</label>
+                <input type="text" placeholder="请输入资源名称">
+            </div>
+        </div>
+        <div class="filter-actions">
+            <button class="btn btn-default">重置</button>
+            <button class="btn btn-primary">查询</button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>角色名称</th>
+                    <th>资源类型</th>
+                    <th>资源名称</th>
+                    <th>权限状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>管理员</td>
+                    <td>菜单</td>
+                    <td>客户主体管理</td>
+                    <td><span class="status-tag status-enabled">已启用</span></td>
+                    <td>
+                        <button class="action-btn">编辑权限</button>
+                        <button class="action-btn">查看日志</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>审核员</td>
+                    <td>接口</td>
+                    <td>转账审核</td>
+                    <td><span class="status-tag status-enabled">已启用</span></td>
+                    <td>
+                        <button class="action-btn">编辑权限</button>
+                        <button class="action-btn">查看日志</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 编辑权限弹窗 -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>编辑权限</h3>
+                <button class="close">&times;</button>
+            </div>
+            <div class="permission-tree">
+                <div class="permission-item">
+                    <label>
+                        <input type="checkbox" checked>
+                        客户主体管理
+                    </label>
+                </div>
+                <div class="permission-item" style="margin-left: 24px;">
+                    <label>
+                        <input type="checkbox" checked>
+                        查看列表
+                    </label>
+                </div>
+                <div class="permission-item" style="margin-left: 24px;">
+                    <label>
+                        <input type="checkbox" checked>
+                        新增主体
+                    </label>
+                </div>
+                <div class="permission-item" style="margin-left: 24px;">
+                    <label>
+                        <input type="checkbox" checked>
+                        编辑主体
+                    </label>
+                </div>
+                <div class="permission-item" style="margin-left: 24px;">
+                    <label>
+                        <input type="checkbox" checked>
+                        查看钱包
+                    </label>
+                </div>
+            </div>
+            <div class="filter-actions" style="margin-top: 24px;">
+                <button class="btn btn-default">取消</button>
+                <button class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查看日志弹窗 -->
+    <div class="modal" id="logModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>权限变更日志</h3>
+                <button class="close">&times;</button>
+            </div>
+            <div class="log-list">
+                <div class="log-item">
+                    <div class="log-time">2024-03-20 15:30:00</div>
+                    <div class="log-content">
+                        管理员 张三 修改了角色"管理员"的权限，新增了"编辑主体"权限
+                    </div>
+                </div>
+                <div class="log-item">
+                    <div class="log-time">2024-03-19 14:20:00</div>
+                    <div class="log-content">
+                        管理员 李四 创建了角色"审核员"，并配置了基础权限
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 加载共享导航
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '../shared/nav.html', true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                document.getElementById('nav-container').innerHTML = xhr.responseText;
+                // 设置页面标题
+                document.getElementById('page-title').textContent = '权限配置';
+            }
+        };
+        xhr.send();
+
+        // 简单的交互逻辑
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.textContent === '编辑权限') {
+                    document.getElementById('editModal').style.display = 'block';
+                } else if (btn.textContent === '查看日志') {
+                    document.getElementById('logModal').style.display = 'block';
+                }
+            });
+        });
+
+        document.querySelectorAll('.close').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('editModal').style.display = 'none';
+                document.getElementById('logModal').style.display = 'none';
+            });
+        });
+
+        document.querySelectorAll('.btn-default').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('editModal').style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html> 
