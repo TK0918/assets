@@ -196,7 +196,7 @@
     <script>
         // 加载共享导航
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', '../shared/nav.html', true);
+        xhr.open('GET', '/assets/shared/nav.html', true);
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 document.getElementById('nav-container').innerHTML = xhr.responseText;
