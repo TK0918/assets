@@ -30,26 +30,20 @@
 
         .filters {
             background: white;
-            padding: 24px;
+            padding: 16px;
             border-radius: 4px;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             box-shadow: 0 1px 4px rgba(0,21,41,.08);
         }
 
         .filter-row {
             display: flex;
-            gap: 16px;
-            margin-bottom: 16px;
+            gap: 12px;
+            margin-bottom: 12px;
         }
 
         .filter-item {
             flex: 1;
-        }
-
-        .filter-item label {
-            display: block;
-            margin-bottom: 8px;
-            color: #666;
         }
 
         .filter-item input,
@@ -59,6 +53,7 @@
             border: 1px solid var(--border-color);
             border-radius: 4px;
             font-size: 14px;
+            height: 36px;
         }
 
         .filter-item input:focus,
@@ -260,17 +255,14 @@
     <div class="filters">
         <div class="filter-row">
             <div class="filter-item">
-                <label>主体ID</label>
                 <input type="text" placeholder="请输入主体ID">
             </div>
             <div class="filter-item">
-                <label>银行流水号</label>
                 <input type="text" placeholder="请输入银行流水号">
             </div>
             <div class="filter-item">
-                <label>业务模块</label>
                 <select>
-                    <option value="">全部</option>
+                    <option value="">全部业务模块</option>
                     <option value="ad">广告</option>
                     <option value="fulfillment">履约</option>
                 </select>
@@ -278,13 +270,15 @@
         </div>
         <div class="filter-row">
             <div class="filter-item">
-                <label>提交日期</label>
-                <input type="date">
+                <input type="date" placeholder="开始时间">
             </div>
             <div class="filter-item">
-                <label>审核状态</label>
-                <select multiple>
-                    <option value="pending" selected>待审核</option>
+                <input type="date" placeholder="结束时间">
+            </div>
+            <div class="filter-item">
+                <select>
+                    <option value="">全部审核状态</option>
+                    <option value="pending">待审核</option>
                     <option value="approved">通过</option>
                     <option value="rejected">驳回</option>
                 </select>
@@ -307,6 +301,7 @@
                     <th>金额</th>
                     <th>附件</th>
                     <th>审核状态</th>
+                    <th>审核建议</th>
                     <th>审核人</th>
                     <th>审核时间</th>
                     <th>操作</th>
@@ -328,6 +323,7 @@
                     <td><span class="status-tag status-pending">待审核</span></td>
                     <td>-</td>
                     <td>-</td>
+                    <td>-</td>
                     <td>
                         <button class="btn btn-success">通过</button>
                         <button class="btn btn-error">驳回</button>
@@ -347,6 +343,7 @@
                         </a>
                     </td>
                     <td><span class="status-tag status-approved">通过</span></td>
+                    <td>同意入账</td>
                     <td>张三</td>
                     <td>2024-03-19 15:30</td>
                     <td>

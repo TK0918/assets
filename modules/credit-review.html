@@ -30,26 +30,20 @@
 
         .filters {
             background: white;
-            padding: 24px;
+            padding: 16px;
             border-radius: 4px;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             box-shadow: 0 1px 4px rgba(0,21,41,.08);
         }
 
         .filter-row {
             display: flex;
-            gap: 16px;
-            margin-bottom: 16px;
+            gap: 12px;
+            margin-bottom: 12px;
         }
 
         .filter-item {
             flex: 1;
-        }
-
-        .filter-item label {
-            display: block;
-            margin-bottom: 8px;
-            color: #666;
         }
 
         .filter-item input,
@@ -59,6 +53,7 @@
             border: 1px solid var(--border-color);
             border-radius: 4px;
             font-size: 14px;
+            height: 36px;
         }
 
         .filter-item input:focus,
@@ -258,26 +253,20 @@
     <div class="filters">
         <div class="filter-row">
             <div class="filter-item">
-                <label>主体ID</label>
                 <input type="text" placeholder="请输入主体ID">
             </div>
             <div class="filter-item">
-                <label>申请日期</label>
-                <input type="date">
+                <input type="date" placeholder="开始时间">
             </div>
             <div class="filter-item">
-                <label>申请额度范围</label>
-                <div style="display: flex; gap: 8px;">
-                    <input type="number" placeholder="最小值" style="flex: 1;">
-                    <input type="number" placeholder="最大值" style="flex: 1;">
-                </div>
+                <input type="date" placeholder="结束时间">
             </div>
         </div>
         <div class="filter-row">
             <div class="filter-item">
-                <label>审核状态</label>
-                <select multiple>
-                    <option value="pending" selected>待审核</option>
+                <select>
+                    <option value="">全部审核状态</option>
+                    <option value="pending">待审核</option>
                     <option value="approved">通过</option>
                     <option value="rejected">驳回</option>
                 </select>
@@ -295,9 +284,10 @@
                 <tr>
                     <th>申请日期</th>
                     <th>主体ID</th>
+                    <th>申请类型</th>
                     <th>申请额度</th>
-                    <th>生效/失效时间</th>
                     <th>审核状态</th>
+                    <th>审批意见</th>
                     <th>审批人</th>
                     <th>审批时间</th>
                     <th>操作</th>
@@ -307,13 +297,10 @@
                 <tr>
                     <td>2024-03-20</td>
                     <td>SUB001</td>
+                    <td>增加</td>
                     <td class="amount">¥100,000.00</td>
-                    <td>
-                        <div class="date-range">
-                            2024-03-20 至 2024-12-31
-                        </div>
-                    </td>
                     <td><span class="status-tag status-pending">待审核</span></td>
+                    <td>-</td>
                     <td>-</td>
                     <td>-</td>
                     <td>
@@ -325,13 +312,10 @@
                 <tr>
                     <td>2024-03-19</td>
                     <td>SUB002</td>
+                    <td>减少</td>
                     <td class="amount">¥50,000.00</td>
-                    <td>
-                        <div class="date-range">
-                            2024-03-19 至 2024-12-31
-                        </div>
-                    </td>
                     <td><span class="status-tag status-approved">通过</span></td>
+                    <td>同意调整额度</td>
                     <td>张三</td>
                     <td>2024-03-19 15:30</td>
                     <td>

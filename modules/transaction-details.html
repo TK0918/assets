@@ -30,26 +30,20 @@
 
         .filters {
             background: white;
-            padding: 24px;
+            padding: 16px;
             border-radius: 4px;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             box-shadow: 0 1px 4px rgba(0,21,41,.08);
         }
 
         .filter-row {
             display: flex;
-            gap: 16px;
-            margin-bottom: 16px;
+            gap: 12px;
+            margin-bottom: 12px;
         }
 
         .filter-item {
             flex: 1;
-        }
-
-        .filter-item label {
-            display: block;
-            margin-bottom: 8px;
-            color: #666;
         }
 
         .filter-item input,
@@ -59,6 +53,7 @@
             border: 1px solid var(--border-color);
             border-radius: 4px;
             font-size: 14px;
+            height: 36px;
         }
 
         .filter-item input:focus,
@@ -220,20 +215,19 @@
     <div class="filters">
         <div class="filter-row">
             <div class="filter-item">
-                <label>主体ID</label>
                 <input type="text" placeholder="请输入主体ID">
             </div>
             <div class="filter-item">
-                <label>业务模块</label>
-                <select multiple>
-                    <option value="transfer">转账</option>
-                    <option value="credit">信用额度</option>
-                    <option value="wallet">钱包</option>
+                <select>
+                    <option value="">全部业务来源</option>
+                    <option value="ad">广告业务</option>
+                    <option value="fulfillment">履约业务</option>
+                    <option value="other">其他业务</option>
                 </select>
             </div>
             <div class="filter-item">
-                <label>交易类型</label>
-                <select multiple>
+                <select>
+                    <option value="">全部交易类型</option>
                     <option value="income">收入</option>
                     <option value="expense">支出</option>
                     <option value="freeze">冻结</option>
@@ -243,14 +237,15 @@
         </div>
         <div class="filter-row">
             <div class="filter-item">
-                <label>时间范围</label>
-                <input type="date">
+                <input type="date" placeholder="开始时间">
             </div>
             <div class="filter-item">
-                <label>金额范围</label>
+                <input type="date" placeholder="结束时间">
+            </div>
+            <div class="filter-item">
                 <div style="display: flex; gap: 8px;">
-                    <input type="number" placeholder="最小值" style="flex: 1;">
-                    <input type="number" placeholder="最大值" style="flex: 1;">
+                    <input type="number" placeholder="最小金额" style="flex: 1;">
+                    <input type="number" placeholder="最大金额" style="flex: 1;">
                 </div>
             </div>
         </div>
@@ -267,7 +262,7 @@
                 <tr>
                     <th>时间</th>
                     <th>主体ID</th>
-                    <th>业务模块</th>
+                    <th>业务来源</th>
                     <th>交易类型</th>
                     <th>金额</th>
                     <th>冻结金额</th>
@@ -282,7 +277,7 @@
                 <tr>
                     <td>2024-03-20 15:30:00</td>
                     <td>SUB001</td>
-                    <td>转账</td>
+                    <td>广告业务</td>
                     <td>收入</td>
                     <td class="amount positive">+¥10,000.00</td>
                     <td class="amount">¥0.00</td>
@@ -297,7 +292,7 @@
                 <tr>
                     <td>2024-03-20 14:20:00</td>
                     <td>SUB002</td>
-                    <td>信用额度</td>
+                    <td>履约业务</td>
                     <td>冻结</td>
                     <td class="amount">¥0.00</td>
                     <td class="amount negative">-¥5,000.00</td>
