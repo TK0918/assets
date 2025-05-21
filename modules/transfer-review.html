@@ -223,6 +223,29 @@
         .attachment-link:hover {
             text-decoration: underline;
         }
+
+        .metric-tooltip {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .tooltip-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            z-index: 1000;
+            white-space: nowrap;
+        }
+
+        .metric-tooltip:hover .tooltip-content {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -256,33 +279,24 @@
     <div class="filters">
         <div class="filter-row">
             <div class="filter-item">
-                <input type="text" placeholder="请输入主体ID">
+                <input type="text" placeholder="主体ID">
             </div>
             <div class="filter-item">
-                <input type="text" placeholder="请输入银行流水号">
+                <input type="text" placeholder="主体名称">
             </div>
             <div class="filter-item">
                 <select>
-                    <option value="">全部业务模块</option>
-                    <option value="ad">广告</option>
-                    <option value="fulfillment">履约</option>
+                    <option value="">全部状态</option>
+                    <option value="pending">待审核</option>
+                    <option value="approved">通过</option>
+                    <option value="rejected">驳回</option>
                 </select>
             </div>
-        </div>
-        <div class="filter-row">
             <div class="filter-item">
                 <input type="date" placeholder="开始时间">
             </div>
             <div class="filter-item">
                 <input type="date" placeholder="结束时间">
-            </div>
-            <div class="filter-item">
-                <select>
-                    <option value="">全部审核状态</option>
-                    <option value="pending">待审核</option>
-                    <option value="approved">通过</option>
-                    <option value="rejected">驳回</option>
-                </select>
             </div>
         </div>
         <div class="filter-actions">
@@ -295,60 +309,104 @@
         <table>
             <thead>
                 <tr>
-                    <th>提交日期</th>
-                    <th>主体ID</th>
-                    <th>业务模块</th>
-                    <th>银行流水号</th>
-                    <th>金额</th>
-                    <th>附件</th>
-                    <th>审核状态</th>
-                    <th>审核建议</th>
-                    <th>审核人</th>
-                    <th>审核时间</th>
+                    <th>
+                        <div class="metric-tooltip">
+                            主体ID
+                            <div class="tooltip-content">客户主体的唯一标识符</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            主体名称
+                            <div class="tooltip-content">客户主体的名称</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            提交时间
+                            <div class="tooltip-content">转账申请的提交时间</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            转账渠道
+                            <div class="tooltip-content">客户使用的转账渠道（如Wise、Airwallex等）</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            转账币种
+                            <div class="tooltip-content">转账使用的货币类型</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            转账金额
+                            <div class="tooltip-content">转账的具体金额</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            审核状态
+                            <div class="tooltip-content">当前转账申请的审核状态</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            审核建议
+                            <div class="tooltip-content">审核人员给出的处理建议</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            审核人
+                            <div class="tooltip-content">执行审核操作的人员</div>
+                        </div>
+                    </th>
                     <th>操作</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>2024-03-20</td>
                     <td>SUB001</td>
-                    <td>广告</td>
-                    <td>BANK20240320001</td>
-                    <td>¥10,000.00</td>
-                    <td>
-                        <a href="#" class="attachment-link">
-                            <i class="mdi mdi-file-pdf"></i>
-                            回单.pdf
-                        </a>
-                    </td>
+                    <td>测试公司A</td>
+                    <td>2024-03-20 14:30:00</td>
+                    <td>Wise</td>
+                    <td>USD</td>
+                    <td class="amount positive">$10,000.00</td>
                     <td><span class="status-tag status-pending">待审核</span></td>
                     <td>-</td>
                     <td>-</td>
-                    <td>-</td>
                     <td>
-                        <button class="btn btn-success">通过</button>
-                        <button class="btn btn-error">驳回</button>
-                        <button class="action-btn">查看日志</button>
+                        <button class="action-btn">审核</button>
                     </td>
                 </tr>
                 <tr>
-                    <td>2024-03-19</td>
                     <td>SUB002</td>
-                    <td>履约</td>
-                    <td>BANK20240319001</td>
-                    <td>¥5,000.00</td>
-                    <td>
-                        <a href="#" class="attachment-link">
-                            <i class="mdi mdi-file-pdf"></i>
-                            回单.pdf
-                        </a>
-                    </td>
-                    <td><span class="status-tag status-approved">通过</span></td>
-                    <td>同意入账</td>
+                    <td>测试公司B</td>
+                    <td>2024-03-20 13:15:00</td>
+                    <td>Airwallex</td>
+                    <td>EUR</td>
+                    <td class="amount positive">€8,500.00</td>
+                    <td><span class="status-tag status-approved">已通过</span></td>
+                    <td>建议通过</td>
                     <td>张三</td>
-                    <td>2024-03-19 15:30</td>
                     <td>
-                        <button class="action-btn">查看日志</button>
+                        <button class="action-btn">查看</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>SUB003</td>
+                    <td>测试公司C</td>
+                    <td>2024-03-20 11:45:00</td>
+                    <td>Wise</td>
+                    <td>GBP</td>
+                    <td class="amount positive">£5,000.00</td>
+                    <td><span class="status-tag status-rejected">已驳回</span></td>
+                    <td>金额有误</td>
+                    <td>李四</td>
+                    <td>
+                        <button class="action-btn">查看</button>
                     </td>
                 </tr>
             </tbody>
