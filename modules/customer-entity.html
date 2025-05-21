@@ -113,6 +113,49 @@
         th {
             background: #fafafa;
             font-weight: 500;
+            position: relative;
+        }
+
+        .metric-tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .metric-tooltip::after {
+            content: "?";
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            text-align: center;
+            border-radius: 50%;
+            background: #e8e8e8;
+            color: #666;
+            font-size: 12px;
+            margin-left: 4px;
+        }
+
+        .tooltip-content {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: #666;
+            width: 200px;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 8px;
+        }
+
+        .metric-tooltip:hover .tooltip-content {
+            display: block;
         }
 
         .main-row {
@@ -142,6 +185,27 @@
 
         .expand-icon.expanded {
             transform: rotate(90deg);
+        }
+
+        .amount {
+            font-family: monospace;
+            font-weight: 500;
+        }
+
+        .amount.positive {
+            color: var(--success-color);
+        }
+
+        .amount.negative {
+            color: var(--error-color);
+        }
+
+        .amount.warning {
+            color: var(--warning-color);
+        }
+
+        .amount.primary {
+            color: var(--primary-color);
         }
 
         .wallet-info {
@@ -364,10 +428,66 @@
         <table>
             <thead>
                 <tr>
-                    <th>主体ID</th>
-                    <th>主体名称</th>
-                    <th>状态</th>
-                    <th>创建时间</th>
+                    <th>
+                        <div class="metric-tooltip">
+                            主体ID
+                            <div class="tooltip-content">客户主体的唯一标识符</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            主体名称
+                            <div class="tooltip-content">客户主体的名称</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            创建时间
+                            <div class="tooltip-content">客户主体的创建时间</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            业务
+                            <div class="tooltip-content">业务类型（广告/履约）</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            可用余额
+                            <div class="tooltip-content">客户业务资产总共可使用的全部余额（真实金额-冻结金额+信用额度-已使用信用额度）</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            在途金额
+                            <div class="tooltip-content">客户给我司的资金账户打款，但是金额尚未入账到我司资金账户的金额</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            真实金额
+                            <div class="tooltip-content">客户的流动现金，可用于消费。可以理解为支付宝的余额</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            信用额度
+                            <div class="tooltip-content">当真实金额不足时，可透支使用的金额</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            已用额度
+                            <div class="tooltip-content">已经使用的信用额度</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            冻结金额
+                            <div class="tooltip-content">客户进行消费时，尚未确定消费结束而冻结的金额。防止客户超额消费</div>
+                        </div>
+                    </th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -378,74 +498,50 @@
                         SUB001
                     </td>
                     <td>测试公司A</td>
-                    <td><span class="status-tag status-active">正常</span></td>
                     <td>2024-03-20</td>
+                    <td>-</td>
+                    <td class="amount positive">¥185,000.00</td>
+                    <td class="amount warning">¥7,000.00</td>
+                    <td class="amount positive">¥180,000.00</td>
+                    <td class="amount primary">¥80,000.00</td>
+                    <td class="amount negative">¥30,000.00</td>
+                    <td class="amount warning">¥15,000.00</td>
                     <td>
                         <button class="action-btn">编辑</button>
                     </td>
                 </tr>
                 <tr class="sub-row" data-parent="SUB001" style="display: none;">
-                    <td colspan="5">
-                        <div class="wallet-info">
-                            <div class="wallet-item">
-                                <h4>广告业务钱包</h4>
-                                <div class="wallet-metrics">
-                                    <div class="metric-item">
-                                        <span class="metric-label">在途金额</span>
-                                        <span class="metric-value warning">¥5,000.00</span>
-                                    </div>
-                                    <div class="metric-item">
-                                        <span class="metric-label">真实金额</span>
-                                        <span class="metric-value positive">¥100,000.00</span>
-                                    </div>
-                                    <div class="metric-item">
-                                        <span class="metric-label">信用额度</span>
-                                        <span class="metric-value primary">¥50,000.00</span>
-                                    </div>
-                                    <div class="metric-item">
-                                        <span class="metric-label">已使用信用额度</span>
-                                        <span class="metric-value negative">¥20,000.00</span>
-                                    </div>
-                                    <div class="metric-item">
-                                        <span class="metric-label">冻结金额</span>
-                                        <span class="metric-value warning">¥10,000.00</span>
-                                    </div>
-                                    <div class="metric-item metric-total">
-                                        <span class="metric-label">可用余额</span>
-                                        <span class="metric-value positive">¥120,000.00</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="wallet-item">
-                                <h4>履约业务钱包</h4>
-                                <div class="wallet-metrics">
-                                    <div class="metric-item">
-                                        <span class="metric-label">在途金额</span>
-                                        <span class="metric-value warning">¥2,000.00</span>
-                                    </div>
-                                    <div class="metric-item">
-                                        <span class="metric-label">真实金额</span>
-                                        <span class="metric-value positive">¥50,000.00</span>
-                                    </div>
-                                    <div class="metric-item">
-                                        <span class="metric-label">信用额度</span>
-                                        <span class="metric-value primary">¥30,000.00</span>
-                                    </div>
-                                    <div class="metric-item">
-                                        <span class="metric-label">已使用信用额度</span>
-                                        <span class="metric-value negative">¥10,000.00</span>
-                                    </div>
-                                    <div class="metric-item">
-                                        <span class="metric-label">冻结金额</span>
-                                        <span class="metric-value warning">¥5,000.00</span>
-                                    </div>
-                                    <div class="metric-item metric-total">
-                                        <span class="metric-label">可用余额</span>
-                                        <span class="metric-value positive">¥65,000.00</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <td colspan="11">
+                        <table style="width: 100%; margin-top: 8px;">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 16px;"></td>
+                                    <td style="width: 16px;"></td>
+                                    <td style="width: 16px;"></td>
+                                    <td>广告业务</td>
+                                    <td class="amount positive" style="width: 120px;">¥120,000.00</td>
+                                    <td class="amount warning" style="width: 120px;">¥5,000.00</td>
+                                    <td class="amount positive" style="width: 120px;">¥100,000.00</td>
+                                    <td class="amount primary" style="width: 120px;">¥50,000.00</td>
+                                    <td class="amount negative" style="width: 120px;">¥30,000.00</td>
+                                    <td class="amount warning" style="width: 120px;">¥10,000.00</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 16px;"></td>
+                                    <td style="width: 16px;"></td>
+                                    <td style="width: 16px;"></td>
+                                    <td>履约业务</td>
+                                    <td class="amount positive" style="width: 120px;">¥65,000.00</td>
+                                    <td class="amount warning" style="width: 120px;">¥2,000.00</td>
+                                    <td class="amount positive" style="width: 120px;">¥50,000.00</td>
+                                    <td class="amount primary" style="width: 120px;">¥30,000.00</td>
+                                    <td class="amount negative" style="width: 120px;">¥10,000.00</td>
+                                    <td class="amount warning" style="width: 120px;">¥5,000.00</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </td>
                 </tr>
                 <tr class="main-row" data-id="SUB002">
@@ -454,74 +550,50 @@
                         SUB002
                     </td>
                     <td>测试公司B</td>
-                    <td><span class="status-tag status-inactive">禁用</span></td>
                     <td>2024-03-19</td>
+                    <td>-</td>
+                    <td class="amount positive">¥135,000.00</td>
+                    <td class="amount warning">¥4,000.00</td>
+                    <td class="amount positive">¥110,000.00</td>
+                    <td class="amount primary">¥60,000.00</td>
+                    <td class="amount negative">¥23,000.00</td>
+                    <td class="amount warning">¥12,000.00</td>
                     <td>
                         <button class="action-btn">编辑</button>
                     </td>
                 </tr>
                 <tr class="sub-row" data-parent="SUB002" style="display: none;">
-                    <td colspan="5">
-                        <div class="wallet-info">
-                            <div class="wallet-item">
-                                <h4>广告业务钱包</h4>
-                                <div class="wallet-metrics">
-                                    <div class="metric-item">
-                                        <span class="metric-label">在途金额</span>
-                                        <span class="metric-value warning">¥3,000.00</span>
-                                    </div>
-                                    <div class="metric-item">
-                                        <span class="metric-label">真实金额</span>
-                                        <span class="metric-value positive">¥80,000.00</span>
-                                    </div>
-                                    <div class="metric-item">
-                                        <span class="metric-label">信用额度</span>
-                                        <span class="metric-value primary">¥40,000.00</span>
-                                    </div>
-                                    <div class="metric-item">
-                                        <span class="metric-label">已使用信用额度</span>
-                                        <span class="metric-value negative">¥15,000.00</span>
-                                    </div>
-                                    <div class="metric-item">
-                                        <span class="metric-label">冻结金额</span>
-                                        <span class="metric-value warning">¥8,000.00</span>
-                                    </div>
-                                    <div class="metric-item metric-total">
-                                        <span class="metric-label">可用余额</span>
-                                        <span class="metric-value positive">¥97,000.00</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="wallet-item">
-                                <h4>履约业务钱包</h4>
-                                <div class="wallet-metrics">
-                                    <div class="metric-item">
-                                        <span class="metric-label">在途金额</span>
-                                        <span class="metric-value warning">¥1,000.00</span>
-                                    </div>
-                                    <div class="metric-item">
-                                        <span class="metric-label">真实金额</span>
-                                        <span class="metric-value positive">¥30,000.00</span>
-                                    </div>
-                                    <div class="metric-item">
-                                        <span class="metric-label">信用额度</span>
-                                        <span class="metric-value primary">¥20,000.00</span>
-                                    </div>
-                                    <div class="metric-item">
-                                        <span class="metric-label">已使用信用额度</span>
-                                        <span class="metric-value negative">¥8,000.00</span>
-                                    </div>
-                                    <div class="metric-item">
-                                        <span class="metric-label">冻结金额</span>
-                                        <span class="metric-value warning">¥4,000.00</span>
-                                    </div>
-                                    <div class="metric-item metric-total">
-                                        <span class="metric-label">可用余额</span>
-                                        <span class="metric-value positive">¥38,000.00</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <td colspan="11">
+                        <table style="width: 100%; margin-top: 8px;">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 16px;"></td>
+                                    <td style="width: 16px;"></td>
+                                    <td style="width: 16px;"></td>
+                                    <td>广告业务</td>
+                                    <td class="amount positive" style="width: 120px;">¥97,000.00</td>
+                                    <td class="amount warning" style="width: 120px;">¥3,000.00</td>
+                                    <td class="amount positive" style="width: 120px;">¥80,000.00</td>
+                                    <td class="amount primary" style="width: 120px;">¥40,000.00</td>
+                                    <td class="amount negative" style="width: 120px;">¥15,000.00</td>
+                                    <td class="amount warning" style="width: 120px;">¥8,000.00</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 16px;"></td>
+                                    <td style="width: 16px;"></td>
+                                    <td style="width: 16px;"></td>
+                                    <td>履约业务</td>
+                                    <td class="amount positive" style="width: 120px;">¥38,000.00</td>
+                                    <td class="amount warning" style="width: 120px;">¥1,000.00</td>
+                                    <td class="amount positive" style="width: 120px;">¥30,000.00</td>
+                                    <td class="amount primary" style="width: 120px;">¥20,000.00</td>
+                                    <td class="amount negative" style="width: 120px;">¥8,000.00</td>
+                                    <td class="amount warning" style="width: 120px;">¥4,000.00</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </td>
                 </tr>
             </tbody>
