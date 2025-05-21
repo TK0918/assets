@@ -115,6 +115,110 @@
             font-weight: 500;
         }
 
+        .main-row {
+            cursor: pointer;
+            background: white;
+        }
+
+        .main-row:hover {
+            background: #fafafa;
+        }
+
+        .sub-row {
+            background: #fafafa;
+        }
+
+        .sub-row td {
+            padding-left: 48px;
+        }
+
+        .expand-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            transition: transform 0.3s;
+        }
+
+        .expand-icon.expanded {
+            transform: rotate(90deg);
+        }
+
+        .wallet-info {
+            display: flex;
+            gap: 24px;
+            padding: 16px;
+        }
+
+        .wallet-item {
+            flex: 1;
+            padding: 16px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .wallet-item h4 {
+            margin: 0 0 16px 0;
+            color: var(--text-color);
+            font-size: 16px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .wallet-metrics {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .metric-value {
+            font-family: monospace;
+            font-weight: 500;
+        }
+
+        .metric-value.positive {
+            color: var(--success-color);
+        }
+
+        .metric-value.negative {
+            color: var(--error-color);
+        }
+
+        .metric-value.warning {
+            color: var(--warning-color);
+        }
+
+        .metric-value.primary {
+            color: var(--primary-color);
+        }
+
+        .metric-total {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        .metric-total .metric-label {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .metric-total .metric-value {
+            font-size: 18px;
+        }
+
         .status-tag {
             display: inline-block;
             padding: 4px 8px;
@@ -268,24 +372,156 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>SUB001</td>
+                <tr class="main-row" data-id="SUB001">
+                    <td>
+                        <i class="mdi mdi-chevron-right expand-icon"></i>
+                        SUB001
+                    </td>
                     <td>测试公司A</td>
                     <td><span class="status-tag status-active">正常</span></td>
                     <td>2024-03-20</td>
                     <td>
                         <button class="action-btn">编辑</button>
-                        <button class="action-btn">查看钱包</button>
                     </td>
                 </tr>
-                <tr>
-                    <td>SUB002</td>
+                <tr class="sub-row" data-parent="SUB001" style="display: none;">
+                    <td colspan="5">
+                        <div class="wallet-info">
+                            <div class="wallet-item">
+                                <h4>广告业务钱包</h4>
+                                <div class="wallet-metrics">
+                                    <div class="metric-item">
+                                        <span class="metric-label">在途金额</span>
+                                        <span class="metric-value warning">¥5,000.00</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">真实金额</span>
+                                        <span class="metric-value positive">¥100,000.00</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">信用额度</span>
+                                        <span class="metric-value primary">¥50,000.00</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">已使用信用额度</span>
+                                        <span class="metric-value negative">¥20,000.00</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">冻结金额</span>
+                                        <span class="metric-value warning">¥10,000.00</span>
+                                    </div>
+                                    <div class="metric-item metric-total">
+                                        <span class="metric-label">可用余额</span>
+                                        <span class="metric-value positive">¥120,000.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="wallet-item">
+                                <h4>履约业务钱包</h4>
+                                <div class="wallet-metrics">
+                                    <div class="metric-item">
+                                        <span class="metric-label">在途金额</span>
+                                        <span class="metric-value warning">¥2,000.00</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">真实金额</span>
+                                        <span class="metric-value positive">¥50,000.00</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">信用额度</span>
+                                        <span class="metric-value primary">¥30,000.00</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">已使用信用额度</span>
+                                        <span class="metric-value negative">¥10,000.00</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">冻结金额</span>
+                                        <span class="metric-value warning">¥5,000.00</span>
+                                    </div>
+                                    <div class="metric-item metric-total">
+                                        <span class="metric-label">可用余额</span>
+                                        <span class="metric-value positive">¥65,000.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="main-row" data-id="SUB002">
+                    <td>
+                        <i class="mdi mdi-chevron-right expand-icon"></i>
+                        SUB002
+                    </td>
                     <td>测试公司B</td>
                     <td><span class="status-tag status-inactive">禁用</span></td>
                     <td>2024-03-19</td>
                     <td>
                         <button class="action-btn">编辑</button>
-                        <button class="action-btn">查看钱包</button>
+                    </td>
+                </tr>
+                <tr class="sub-row" data-parent="SUB002" style="display: none;">
+                    <td colspan="5">
+                        <div class="wallet-info">
+                            <div class="wallet-item">
+                                <h4>广告业务钱包</h4>
+                                <div class="wallet-metrics">
+                                    <div class="metric-item">
+                                        <span class="metric-label">在途金额</span>
+                                        <span class="metric-value warning">¥3,000.00</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">真实金额</span>
+                                        <span class="metric-value positive">¥80,000.00</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">信用额度</span>
+                                        <span class="metric-value primary">¥40,000.00</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">已使用信用额度</span>
+                                        <span class="metric-value negative">¥15,000.00</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">冻结金额</span>
+                                        <span class="metric-value warning">¥8,000.00</span>
+                                    </div>
+                                    <div class="metric-item metric-total">
+                                        <span class="metric-label">可用余额</span>
+                                        <span class="metric-value positive">¥97,000.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="wallet-item">
+                                <h4>履约业务钱包</h4>
+                                <div class="wallet-metrics">
+                                    <div class="metric-item">
+                                        <span class="metric-label">在途金额</span>
+                                        <span class="metric-value warning">¥1,000.00</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">真实金额</span>
+                                        <span class="metric-value positive">¥30,000.00</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">信用额度</span>
+                                        <span class="metric-value primary">¥20,000.00</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">已使用信用额度</span>
+                                        <span class="metric-value negative">¥8,000.00</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">冻结金额</span>
+                                        <span class="metric-value warning">¥4,000.00</span>
+                                    </div>
+                                    <div class="metric-item metric-total">
+                                        <span class="metric-label">可用余额</span>
+                                        <span class="metric-value positive">¥38,000.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -328,8 +564,25 @@
 
     <script>
         // 简单的交互逻辑
+        document.querySelectorAll('.main-row').forEach(row => {
+            row.addEventListener('click', () => {
+                const id = row.dataset.id;
+                const subRow = document.querySelector(`.sub-row[data-parent="${id}"]`);
+                const icon = row.querySelector('.expand-icon');
+                
+                if (subRow.style.display === 'none') {
+                    subRow.style.display = 'table-row';
+                    icon.classList.add('expanded');
+                } else {
+                    subRow.style.display = 'none';
+                    icon.classList.remove('expanded');
+                }
+            });
+        });
+
         document.querySelectorAll('.action-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation(); // 阻止事件冒泡
                 if (btn.textContent === '编辑') {
                     document.getElementById('editModal').style.display = 'block';
                 }
