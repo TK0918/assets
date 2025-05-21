@@ -221,6 +221,43 @@
             color: #666;
             font-size: 14px;
         }
+
+        .metric-tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .tooltip-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-top: 8px;
+        }
+
+        .metric-tooltip:hover .tooltip-content {
+            display: block;
+        }
+
+        .tooltip-content::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 4px;
+            border-style: solid;
+            border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;
+        }
     </style>
 </head>
 <body>
@@ -254,23 +291,24 @@
     <div class="filters">
         <div class="filter-row">
             <div class="filter-item">
-                <input type="text" placeholder="请输入主体ID">
+                <input type="text" placeholder="主体ID">
+            </div>
+            <div class="filter-item">
+                <input type="text" placeholder="主体名称">
+            </div>
+            <div class="filter-item">
+                <select>
+                    <option value="">全部状态</option>
+                    <option value="pending">待审核</option>
+                    <option value="approved">通过</option>
+                    <option value="rejected">驳回</option>
+                </select>
             </div>
             <div class="filter-item">
                 <input type="date" placeholder="开始时间">
             </div>
             <div class="filter-item">
                 <input type="date" placeholder="结束时间">
-            </div>
-        </div>
-        <div class="filter-row">
-            <div class="filter-item">
-                <select>
-                    <option value="">全部审核状态</option>
-                    <option value="pending">待审核</option>
-                    <option value="approved">通过</option>
-                    <option value="rejected">驳回</option>
-                </select>
             </div>
         </div>
         <div class="filter-actions">
@@ -283,44 +321,113 @@
         <table>
             <thead>
                 <tr>
-                    <th>申请日期</th>
-                    <th>主体ID</th>
-                    <th>申请类型</th>
-                    <th>申请额度</th>
-                    <th>审核状态</th>
-                    <th>审批意见</th>
-                    <th>审批人</th>
-                    <th>审批时间</th>
+                    <th>
+                        <div class="metric-tooltip">
+                            主体ID
+                            <div class="tooltip-content">客户主体的唯一标识符</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            主体名称
+                            <div class="tooltip-content">客户主体的名称</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            申请时间
+                            <div class="tooltip-content">信用额度调整申请的提交时间</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            申请人员
+                            <div class="tooltip-content">提出信用额度调整申请的业务人员</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            子业务
+                            <div class="tooltip-content">需要调整信用额度的业务钱包</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            申请类型
+                            <div class="tooltip-content">信用额度调整的方向（增加/减少）</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            申请额度
+                            <div class="tooltip-content">申请调整的信用额度金额</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            审核状态
+                            <div class="tooltip-content">当前申请的审核状态</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            审批意见
+                            <div class="tooltip-content">审核人员给出的处理意见</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            审批人
+                            <div class="tooltip-content">执行审核操作的人员</div>
+                        </div>
+                    </th>
                     <th>操作</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>2024-03-20</td>
                     <td>SUB001</td>
+                    <td>测试公司A</td>
+                    <td>2024-03-20 14:30:00</td>
+                    <td>张三</td>
+                    <td>广告业务</td>
                     <td>增加</td>
-                    <td class="amount">¥100,000.00</td>
+                    <td class="amount primary">¥50,000.00</td>
                     <td><span class="status-tag status-pending">待审核</span></td>
                     <td>-</td>
                     <td>-</td>
-                    <td>-</td>
                     <td>
-                        <button class="btn btn-success">通过</button>
-                        <button class="btn btn-error">驳回</button>
-                        <button class="action-btn">查看详情</button>
+                        <button class="action-btn">审核</button>
                     </td>
                 </tr>
                 <tr>
-                    <td>2024-03-19</td>
                     <td>SUB002</td>
+                    <td>测试公司B</td>
+                    <td>2024-03-20 13:15:00</td>
+                    <td>李四</td>
+                    <td>履约业务</td>
                     <td>减少</td>
-                    <td class="amount">¥50,000.00</td>
-                    <td><span class="status-tag status-approved">通过</span></td>
-                    <td>同意调整额度</td>
-                    <td>张三</td>
-                    <td>2024-03-19 15:30</td>
+                    <td class="amount primary">¥30,000.00</td>
+                    <td><span class="status-tag status-approved">已通过</span></td>
+                    <td>同意调整</td>
+                    <td>王五</td>
                     <td>
-                        <button class="action-btn">查看详情</button>
+                        <button class="action-btn">查看</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>SUB003</td>
+                    <td>测试公司C</td>
+                    <td>2024-03-20 11:45:00</td>
+                    <td>赵六</td>
+                    <td>广告业务</td>
+                    <td>增加</td>
+                    <td class="amount primary">¥20,000.00</td>
+                    <td><span class="status-tag status-rejected">已驳回</span></td>
+                    <td>额度过高</td>
+                    <td>王五</td>
+                    <td>
+                        <button class="action-btn">查看</button>
                     </td>
                 </tr>
             </tbody>
