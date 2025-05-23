@@ -370,6 +370,36 @@
             border-radius: 4px;
             font-size: 14px;
         }
+
+        .table-header {
+            margin-bottom: 16px;
+        }
+
+        .required {
+            color: var(--error-color);
+        }
+
+        .status-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 2px;
+            font-size: 12px;
+        }
+
+        .status-pending {
+            background: #fff7e6;
+            color: var(--warning-color);
+        }
+
+        .status-active {
+            background: #f6ffed;
+            color: var(--success-color);
+        }
+
+        .status-inactive {
+            background: #fff1f0;
+            color: var(--error-color);
+        }
     </style>
 </head>
 <body>
@@ -409,17 +439,18 @@
                 <input type="text" placeholder="主体名称">
             </div>
             <div class="filter-item">
+                <input type="text" placeholder="客户邮箱">
+            </div>
+            <div class="filter-item">
+                <input type="text" placeholder="客户名称">
+            </div>
+            <div class="filter-item">
                 <select>
                     <option value="">全部状态</option>
-                    <option value="active">正常</option>
-                    <option value="inactive">禁用</option>
+                    <option value="pending">待验证</option>
+                    <option value="active">启用</option>
+                    <option value="inactive">停用</option>
                 </select>
-            </div>
-            <div class="filter-item">
-                <input type="date" placeholder="开始时间">
-            </div>
-            <div class="filter-item">
-                <input type="date" placeholder="结束时间">
             </div>
         </div>
         <div class="filter-actions">
@@ -429,6 +460,9 @@
     </div>
 
     <div class="table-container">
+        <div class="table-header">
+            <button class="btn btn-primary" onclick="showCreateModal()">创建客户</button>
+        </div>
         <table>
             <thead>
                 <tr>
@@ -446,231 +480,182 @@
                     </th>
                     <th>
                         <div class="metric-tooltip">
+                            客户名称
+                            <div class="tooltip-content">客户的名称</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            客户邮箱
+                            <div class="tooltip-content">客户的邮箱地址</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
+                            状态
+                            <div class="tooltip-content">客户主体的当前状态</div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="metric-tooltip">
                             创建时间
                             <div class="tooltip-content">客户主体的创建时间</div>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="metric-tooltip">
-                            业务
-                            <div class="tooltip-content">业务类型（广告/履约）</div>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="metric-tooltip">
-                            可用余额
-                            <div class="tooltip-content">客户业务资产总共可使用的全部余额（真实金额-冻结金额+信用额度-已使用信用额度）</div>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="metric-tooltip">
-                            在途金额
-                            <div class="tooltip-content">客户给我司的资金账户打款，但是金额尚未入账到我司资金账户的金额</div>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="metric-tooltip">
-                            真实金额
-                            <div class="tooltip-content">客户的流动现金，可用于消费。可以理解为支付宝的余额</div>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="metric-tooltip">
-                            信用额度
-                            <div class="tooltip-content">当真实金额不足时，可透支使用的金额</div>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="metric-tooltip">
-                            已用额度
-                            <div class="tooltip-content">已经使用的信用额度</div>
-                        </div>
-                    </th>
-                    <th>
-                        <div class="metric-tooltip">
-                            冻结金额
-                            <div class="tooltip-content">客户进行消费时，尚未确定消费结束而冻结的金额。防止客户超额消费</div>
                         </div>
                     </th>
                     <th>操作</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="main-row" data-id="SUB001">
-                    <td>
-                        <i class="mdi mdi-chevron-right expand-icon"></i>
-                        SUB001
-                    </td>
+                <tr class="main-row">
+                    <td>SUB001</td>
                     <td>测试公司A</td>
-                    <td>2024-03-20</td>
-                    <td>-</td>
-                    <td class="amount positive">¥185,000.00</td>
-                    <td class="amount warning">¥7,000.00</td>
-                    <td class="amount positive">¥180,000.00</td>
-                    <td class="amount primary">¥80,000.00</td>
-                    <td class="amount negative">¥30,000.00</td>
-                    <td class="amount warning">¥15,000.00</td>
+                    <td>张三</td>
+                    <td>zhangsan@example.com</td>
+                    <td><span class="status-tag status-active">启用</span></td>
+                    <td>2024-03-20 14:30:00</td>
                     <td>
                         <button class="action-btn">编辑</button>
                     </td>
                 </tr>
-                <tr class="sub-row" data-parent="SUB001" style="display: none;">
-                    <td colspan="11">
-                        <table style="width: 100%; margin-top: 8px;">
-                            <tbody>
-                                <tr>
-                                    <td style="width: 16px;"></td>
-                                    <td style="width: 16px;"></td>
-                                    <td style="width: 16px;"></td>
-                                    <td>广告业务</td>
-                                    <td class="amount positive" style="width: 120px;">¥120,000.00</td>
-                                    <td class="amount warning" style="width: 120px;">¥5,000.00</td>
-                                    <td class="amount positive" style="width: 120px;">¥100,000.00</td>
-                                    <td class="amount primary" style="width: 120px;">¥50,000.00</td>
-                                    <td class="amount negative" style="width: 120px;">¥30,000.00</td>
-                                    <td class="amount warning" style="width: 120px;">¥10,000.00</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 16px;"></td>
-                                    <td style="width: 16px;"></td>
-                                    <td style="width: 16px;"></td>
-                                    <td>履约业务</td>
-                                    <td class="amount positive" style="width: 120px;">¥65,000.00</td>
-                                    <td class="amount warning" style="width: 120px;">¥2,000.00</td>
-                                    <td class="amount positive" style="width: 120px;">¥50,000.00</td>
-                                    <td class="amount primary" style="width: 120px;">¥30,000.00</td>
-                                    <td class="amount negative" style="width: 120px;">¥10,000.00</td>
-                                    <td class="amount warning" style="width: 120px;">¥5,000.00</td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <tr class="sub-row">
+                    <td colspan="7">
+                        <div class="wallet-info">
+                            <div class="wallet-card">
+                                <h4>广告业务钱包</h4>
+                                <div class="wallet-metrics">
+                                    <div class="metric">
+                                        <span class="label">在途金额</span>
+                                        <span class="value warning">¥0.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">真实金额</span>
+                                        <span class="value positive">¥10,000.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">信用额度</span>
+                                        <span class="value">¥50,000.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">已使用信用额度</span>
+                                        <span class="value">¥0.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">冻结金额</span>
+                                        <span class="value warning">¥0.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">可用余额</span>
+                                        <span class="value positive">¥60,000.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
-                <tr class="main-row" data-id="SUB002">
-                    <td>
-                        <i class="mdi mdi-chevron-right expand-icon"></i>
-                        SUB002
-                    </td>
+                <tr class="main-row">
+                    <td>SUB002</td>
                     <td>测试公司B</td>
-                    <td>2024-03-19</td>
-                    <td>-</td>
-                    <td class="amount positive">¥135,000.00</td>
-                    <td class="amount warning">¥4,000.00</td>
-                    <td class="amount positive">¥110,000.00</td>
-                    <td class="amount primary">¥60,000.00</td>
-                    <td class="amount negative">¥23,000.00</td>
-                    <td class="amount warning">¥12,000.00</td>
+                    <td>李四</td>
+                    <td>lisi@example.com</td>
+                    <td><span class="status-tag status-pending">待验证</span></td>
+                    <td>2024-03-20 13:15:00</td>
                     <td>
                         <button class="action-btn">编辑</button>
                     </td>
                 </tr>
-                <tr class="sub-row" data-parent="SUB002" style="display: none;">
-                    <td colspan="11">
-                        <table style="width: 100%; margin-top: 8px;">
-                            <tbody>
-                                <tr>
-                                    <td style="width: 16px;"></td>
-                                    <td style="width: 16px;"></td>
-                                    <td style="width: 16px;"></td>
-                                    <td>广告业务</td>
-                                    <td class="amount positive" style="width: 120px;">¥97,000.00</td>
-                                    <td class="amount warning" style="width: 120px;">¥3,000.00</td>
-                                    <td class="amount positive" style="width: 120px;">¥80,000.00</td>
-                                    <td class="amount primary" style="width: 120px;">¥40,000.00</td>
-                                    <td class="amount negative" style="width: 120px;">¥15,000.00</td>
-                                    <td class="amount warning" style="width: 120px;">¥8,000.00</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 16px;"></td>
-                                    <td style="width: 16px;"></td>
-                                    <td style="width: 16px;"></td>
-                                    <td>履约业务</td>
-                                    <td class="amount positive" style="width: 120px;">¥38,000.00</td>
-                                    <td class="amount warning" style="width: 120px;">¥1,000.00</td>
-                                    <td class="amount positive" style="width: 120px;">¥30,000.00</td>
-                                    <td class="amount primary" style="width: 120px;">¥20,000.00</td>
-                                    <td class="amount negative" style="width: 120px;">¥8,000.00</td>
-                                    <td class="amount warning" style="width: 120px;">¥4,000.00</td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <tr class="sub-row">
+                    <td colspan="7">
+                        <div class="wallet-info">
+                            <div class="wallet-card">
+                                <h4>履约业务钱包</h4>
+                                <div class="wallet-metrics">
+                                    <div class="metric">
+                                        <span class="label">在途金额</span>
+                                        <span class="value warning">¥0.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">真实金额</span>
+                                        <span class="value positive">¥5,000.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">信用额度</span>
+                                        <span class="value">¥30,000.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">已使用信用额度</span>
+                                        <span class="value">¥0.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">冻结金额</span>
+                                        <span class="value warning">¥0.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">可用余额</span>
+                                        <span class="value positive">¥35,000.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <!-- 编辑弹窗 -->
-    <div class="modal" id="editModal">
+    <!-- 创建客户弹窗 -->
+    <div class="modal" id="createModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>编辑主体信息</h3>
-                <button class="close">&times;</button>
+                <h3>创建客户</h3>
+                <button class="close" onclick="hideCreateModal()">&times;</button>
             </div>
-            <form>
+            <form id="createForm" onsubmit="handleCreate(event)">
                 <div class="form-group">
-                    <label>主体名称</label>
-                    <input type="text" placeholder="请输入主体名称">
+                    <label>客户邮箱 <span class="required">*</span></label>
+                    <input type="email" required placeholder="请输入客户邮箱">
                 </div>
                 <div class="form-group">
-                    <label>客户经理</label>
-                    <select>
-                        <option value="1">张三</option>
-                        <option value="2">李四</option>
-                    </select>
+                    <label>客户名称 <span class="required">*</span></label>
+                    <input type="text" required placeholder="请输入客户名称">
                 </div>
                 <div class="form-group">
-                    <label>状态</label>
-                    <select>
-                        <option value="active">正常</option>
-                        <option value="inactive">禁用</option>
-                    </select>
+                    <label>主体名称 <span class="required">*</span></label>
+                    <input type="text" required placeholder="请输入主体名称">
                 </div>
                 <div class="filter-actions">
-                    <button type="button" class="btn btn-default">取消</button>
-                    <button type="submit" class="btn btn-primary">保存</button>
+                    <button type="button" class="btn btn-default" onclick="hideCreateModal()">取消</button>
+                    <button type="submit" class="btn btn-primary">发送邀请</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        // 简单的交互逻辑
+        function showCreateModal() {
+            document.getElementById('createModal').style.display = 'block';
+        }
+
+        function hideCreateModal() {
+            document.getElementById('createModal').style.display = 'none';
+        }
+
+        function handleCreate(event) {
+            event.preventDefault();
+            // 这里添加创建客户的逻辑
+            hideCreateModal();
+            alert('操作成功');
+        }
+
+        // 点击行展开/收起
         document.querySelectorAll('.main-row').forEach(row => {
-            row.addEventListener('click', () => {
-                const id = row.dataset.id;
-                const subRow = document.querySelector(`.sub-row[data-parent="${id}"]`);
-                const icon = row.querySelector('.expand-icon');
-                
-                if (subRow.style.display === 'none') {
-                    subRow.style.display = 'table-row';
-                    icon.classList.add('expanded');
-                } else {
-                    subRow.style.display = 'none';
-                    icon.classList.remove('expanded');
+            row.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('action-btn')) {
+                    const subRow = row.nextElementSibling;
+                    if (subRow && subRow.classList.contains('sub-row')) {
+                        subRow.style.display = subRow.style.display === 'none' ? 'table-row' : 'none';
+                    }
                 }
             });
-        });
-
-        document.querySelectorAll('.action-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation(); // 阻止事件冒泡
-                if (btn.textContent === '编辑') {
-                    document.getElementById('editModal').style.display = 'block';
-                }
-            });
-        });
-
-        document.querySelector('.close').addEventListener('click', () => {
-            document.getElementById('editModal').style.display = 'none';
-        });
-
-        document.querySelector('.btn-default').addEventListener('click', () => {
-            document.getElementById('editModal').style.display = 'none';
         });
     </script>
 </body>
