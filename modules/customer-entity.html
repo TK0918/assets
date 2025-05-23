@@ -175,6 +175,7 @@
 
         .sub-row {
             background: #fafafa;
+            display: none;
         }
 
         .sub-row td {
@@ -507,7 +508,10 @@
             </thead>
             <tbody>
                 <tr class="main-row">
-                    <td>SUB001</td>
+                    <td>
+                        <i class="mdi mdi-chevron-right expand-icon"></i>
+                        SUB001
+                    </td>
                     <td>测试公司A</td>
                     <td>张三</td>
                     <td>zhangsan@example.com</td>
@@ -549,23 +553,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="main-row">
-                    <td>SUB002</td>
-                    <td>测试公司B</td>
-                    <td>李四</td>
-                    <td>lisi@example.com</td>
-                    <td><span class="status-tag status-pending">待验证</span></td>
-                    <td>2024-03-20 13:15:00</td>
-                    <td>
-                        <button class="action-btn">编辑</button>
-                    </td>
-                </tr>
-                <tr class="sub-row">
-                    <td colspan="7">
-                        <div class="wallet-info">
                             <div class="wallet-card">
                                 <h4>履约业务钱包</h4>
                                 <div class="wallet-metrics">
@@ -592,6 +579,84 @@
                                     <div class="metric">
                                         <span class="label">可用余额</span>
                                         <span class="value positive">¥35,000.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="main-row">
+                    <td>
+                        <i class="mdi mdi-chevron-right expand-icon"></i>
+                        SUB002
+                    </td>
+                    <td>测试公司B</td>
+                    <td>李四</td>
+                    <td>lisi@example.com</td>
+                    <td><span class="status-tag status-pending">待验证</span></td>
+                    <td>2024-03-20 13:15:00</td>
+                    <td>
+                        <button class="action-btn">编辑</button>
+                    </td>
+                </tr>
+                <tr class="sub-row">
+                    <td colspan="7">
+                        <div class="wallet-info">
+                            <div class="wallet-card">
+                                <h4>广告业务钱包</h4>
+                                <div class="wallet-metrics">
+                                    <div class="metric">
+                                        <span class="label">在途金额</span>
+                                        <span class="value warning">¥0.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">真实金额</span>
+                                        <span class="value positive">¥8,000.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">信用额度</span>
+                                        <span class="value">¥40,000.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">已使用信用额度</span>
+                                        <span class="value">¥0.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">冻结金额</span>
+                                        <span class="value warning">¥0.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">可用余额</span>
+                                        <span class="value positive">¥48,000.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="wallet-card">
+                                <h4>履约业务钱包</h4>
+                                <div class="wallet-metrics">
+                                    <div class="metric">
+                                        <span class="label">在途金额</span>
+                                        <span class="value warning">¥0.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">真实金额</span>
+                                        <span class="value positive">¥3,000.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">信用额度</span>
+                                        <span class="value">¥20,000.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">已使用信用额度</span>
+                                        <span class="value">¥0.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">冻结金额</span>
+                                        <span class="value warning">¥0.00</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="label">可用余额</span>
+                                        <span class="value positive">¥23,000.00</span>
                                     </div>
                                 </div>
                             </div>
@@ -651,8 +716,16 @@
             row.addEventListener('click', (e) => {
                 if (!e.target.classList.contains('action-btn')) {
                     const subRow = row.nextElementSibling;
+                    const icon = row.querySelector('.expand-icon');
+                    
                     if (subRow && subRow.classList.contains('sub-row')) {
-                        subRow.style.display = subRow.style.display === 'none' ? 'table-row' : 'none';
+                        if (subRow.style.display === 'none') {
+                            subRow.style.display = 'table-row';
+                            icon.classList.add('expanded');
+                        } else {
+                            subRow.style.display = 'none';
+                            icon.classList.remove('expanded');
+                        }
                     }
                 }
             });
